@@ -4,7 +4,7 @@ import android.content.Context
 import com.lfkekpoint.blockchain.task.service.NetworkManager
 import io.reactivex.subjects.BehaviorSubject
 
-class ApiInteractor {
+class ServiceInteractor {
 
     private val mController = NetworkManager()
 

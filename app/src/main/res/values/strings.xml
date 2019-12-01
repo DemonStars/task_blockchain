@@ -7,4 +7,9 @@
     <string name="error_knpe">Ошибка приложения: KNPE</string>
     <string name="error_default">Что то пошло не так</string>
     <string name="txt_ok">ok</string>
+    <string name="btn_get_code">Войти</string>
+    <string name="txt_login">Login</string>
+    <string name="txt_password">Password</string>
+    <string name="txt_fill">Заполнить</string>
+    <string name="valid_fill_both_pass_login">Оба поля должны быть заполнены</string>
 </resources>

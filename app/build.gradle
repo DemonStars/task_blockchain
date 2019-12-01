@@ -28,26 +28,13 @@ android {
     flavorDimensions "version"
 
     productFlavors {
-//            buildConfigField "String", "API_URL", "\"https://terminal.utair.io/\""
-//            buildConfigField "String", "API_URL", "\"http://192.168.250.25:8052/\""
-//            buildConfigField "String", "API_URL", "\"https://cashbox.utair.raketa.im/\""
-
-//            buildConfigField "String", "FLIGHTS_ROUTE", "\"api/{apiVersion}/flights/2019-10-01/\""
-//            buildConfigField "String", "FLIGHTS_ROUTE", "\"api/{apiVersion}/flights/\""
 
         dev {
             applicationIdSuffix ".dev"
-//            buildConfigField "String", "API_URL", "\"http://192.168.250.25:8052/\""
-//            buildConfigField "String", "FLIGHTS_ROUTE", "\"api/{apiVersion}/flights/2019-10-01/\""
-            buildConfigField "String", "API_URL", "\"https://terminal.utair.io/\""
-            buildConfigField "String", "FLIGHTS_ROUTE", "\"api/{apiVersion}/flights/\""
+            buildConfigField "String", "API_URL", "\"https://api.dev.karta.com/\""
         }
         prod {
-//            key store - zTk69X7WzQT4HYjx
-//            key alias - 67VMnQWmzb2GRtp3
-
-            buildConfigField "String", "API_URL", "\"https://terminal.utair.io/\""
-            buildConfigField "String", "FLIGHTS_ROUTE", "\"api/{apiVersion}/flights/\""
+            buildConfigField "String", "API_URL", "\"https://api.dev.karta.com/\""
         }
     }
 }
@@ -57,11 +44,11 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation 'androidx.core:core-ktx:1.1.0'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'
 
     implementation 'com.google.android.material:material:1.2.0-alpha02'
     implementation "android.arch.lifecycle:extensions:1.1.1"

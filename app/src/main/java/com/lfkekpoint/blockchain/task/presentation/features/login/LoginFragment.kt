@@ -1,4 +1,4 @@
-package com.lfkekpoint.blockchain.task.dev.presentation.features.login
+package com.lfkekpoint.blockchain.task.presentation.features.login
 
 import com.lfkekpoint.blockchain.task.BR
 import com.lfkekpoint.blockchain.task.R
@@ -14,8 +14,9 @@ class LoginFragment : BaseBindableFragment() {
 
     override val stateObserver = StateObserver<LoginState>(
         onNextAction = { state ->
-            //                when (state) {
-//                    }
+                            when (state) {
+                                GoMain -> showMessage("GoMain")
+                    }
         },
         onSubscribeAction = { controller.disposable.add(it) }
     ) as Observer<Any>

@@ -1,8 +1,8 @@
-package com.lfkekpoint.blockchain.task.dev.presentation
+package com.lfkekpoint.blockchain.task.presentation
 
 import android.os.Bundle
 import com.lfkekpoint.blockchain.task.R
-import com.lfkekpoint.blockchain.task.dev.presentation.extensions.openMainActivity
+import com.lfkekpoint.blockchain.task.presentation.extensions.openMainActivity
 import com.lfkekpoint.blockchain.task.presentation.base.arch.implement.BaseActivity
 
 class StartActivity: BaseActivity() {
@@ -15,5 +15,6 @@ class StartActivity: BaseActivity() {
         super.onCreate(bundle)
 
         openMainActivity()
+        finish()
     }
 }

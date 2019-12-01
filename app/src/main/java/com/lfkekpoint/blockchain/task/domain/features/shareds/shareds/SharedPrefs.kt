@@ -8,7 +8,6 @@ object SharedPrefs : BasePrefs() {
     private val PREFS_ACCESS_TOKEN = "PREFS_ACCESS_TOKEN"
     private val PREFS_REFRESH_TOKEN = "PREFS_REFRESH_TOKEN"
     private val PREFS_CONFIRM_CODE = "PREFS_CONFIRM_CODE"
-    private val PREFS_API_VERSION = "PREFS_API_VERSION"
 
     override fun getPrefsAppKey() = "SharedPrefs"
 
@@ -49,15 +48,5 @@ object SharedPrefs : BasePrefs() {
                 }
             }
             get() = getString(PREFS_REFRESH_TOKEN)
-
-        var apiVersion: String?
-            set(value) {
-                if (value.isNullOrBlank()) {
-                    remove(PREFS_API_VERSION)
-                } else {
-                    put(PREFS_API_VERSION, value)
-                }
-            }
-            get() = getString(PREFS_API_VERSION)
     }
 }

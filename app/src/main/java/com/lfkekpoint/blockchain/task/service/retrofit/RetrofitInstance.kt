@@ -4,17 +4,32 @@ import com.auth0.android.jwt.JWT
 import com.google.gson.GsonBuilder
 import com.lfkekpoint.blockchain.task.BuildConfig
 import com.lfkekpoint.blockchain.task.common.Const
+import com.lfkekpoint.blockchain.task.common.Const.BEARER_PREFFIX
+import com.lfkekpoint.blockchain.task.common.Const.JWT_HEADER
+import com.lfkekpoint.blockchain.task.data.features.api.ApiMethods
+import com.lfkekpoint.blockchain.task.domain.base.ApiMessageException
+import com.lfkekpoint.blockchain.task.domain.features.api.refresh.AuthRefreshReqData
+import com.lfkekpoint.blockchain.task.domain.features.service.ServiceInteractor
 import com.lfkekpoint.blockchain.task.domain.features.shareds.shareds.SharedPrefs.TokenData.accessToken
+import com.lfkekpoint.blockchain.task.domain.features.shareds.shareds.SharedPrefs.TokenData.refreshToken
 import com.lfkekpoint.blockchain.task.presentation.helper.LogHelper
 import com.lfkekpoint.blockchain.task.service.retrofit.RetrofitInstance.JwtSyncState.SYNCHRONIZED
 import com.lfkekpoint.blockchain.task.service.retrofit.RetrofitInstance.JwtSyncState.WITHOUT_TOKENS
+import com.raketa.im.lfkekpoint.utaircashbox.presentation.modules.application.MainApp
+import com.raketa.im.lfkekpoint.utaircashbox.presentation.modules.application.appLifeClasses.AppState.appContext
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.security.cert.CertificateException
 import java.util.*
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 object RetrofitInstance {
 
@@ -33,12 +48,12 @@ object RetrofitInstance {
         addJwtInterceptorListenerToBuilder(okBuilder)
 //        addErrorIntercaptor(okBuilder)
 
-//        if (BuildConfig.DEBUG) {
-//            val interceptor = HttpLoggingInterceptor()
-//            interceptor.level = HttpLoggingInterceptor.Level.BODY
-//
-//            okBuilder.addInterceptor(interceptor)
-//        }
+        if (BuildConfig.DEBUG) {
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.level = HttpLoggingInterceptor.Level.BODY
+            okBuilder.addInterceptor(interceptor)
+            trustAllCertificates(okBuilder)
+        }
 
         val client = okBuilder.build()
 
@@ -58,47 +73,57 @@ object RetrofitInstance {
             .build()
     }
 
-//    private fun addAuthentificatorToBuilder(okBuilder: OkHttpClient.Builder) {
-//        okBuilder.authenticator { route, response ->
-//            if (response.code() == 401) {
-//                val refreshResponse = ApiInteractor()
-//                    .getApiService(AuthApiMethods::class.java)
-//                    .refreshToken(AuthRefreshReqData(refreshToken!!))
-//                    .execute()
-//
-//                if (response.isSuccessful) {
-//
-//                    val body = refreshResponse.body()
-//                    accessToken = body?.data?.accessToken
-//                    refreshToken = body?.data?.refreshToken
-//
-//                    return@authenticator response.request().newBuilder()
-//                        .header(JWT_HEADER, "$BEARER_PREFFIX$accessToken")
-//                        .build()
-//                } else {
-//                    return@authenticator null
-//                }
-//            } else return@authenticator null
-//
-//        }
-//    }
+    private fun trustAllCertificates(builder: OkHttpClient.Builder) {
+        val trustManagers = provideTrustManagers()
+        val provideSslSocketFactory = provideSslSocketFactory(trustManagers)
+
+        provideSslSocketFactory?.let { builder.sslSocketFactory(it, trustManagers[0] as X509TrustManager) }
+    }
+
+    private fun provideSslSocketFactory(trustManagers: Array<TrustManager>): SSLSocketFactory? {
+        return try {
+            val trustAllSslContext = SSLContext.getInstance("SSL")
+            trustAllSslContext.init(null, trustManagers, java.security.SecureRandom())
+            trustAllSslContext.socketFactory
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    fun provideTrustManagers(): Array<TrustManager> {
+        return arrayOf(object : X509TrustManager {
+            @Throws(CertificateException::class)
+            override fun checkClientTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {
+            }
+
+            @Throws(CertificateException::class)
+            override fun checkServerTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {
+            }
+
+            override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> {
+                return arrayOf()
+            }
+        })
+    }
+
 
     private fun addJwtInterceptorToBuilder(okBuilder: OkHttpClient.Builder) {
 
         okBuilder.addInterceptor { chain ->
 
-//            if (accessToken?.isNotBlank() == true && refreshToken?.isNotBlank() == true) {
-//
-//                if (isJwtExpired()) {
-//                    return@addInterceptor requestAccessToken(chain)
-//                } else {
-//                    return@addInterceptor requestWithAccessToken(chain)
-//                }
-//            } else {
-//                mJwtSyncState = WITHOUT_TOKENS
+            if (accessToken?.isNotBlank() == true && refreshToken?.isNotBlank() == true) {
+
+                if (isJwtExpired()) {
+                    return@addInterceptor requestAccessToken(chain)
+                } else {
+                    return@addInterceptor requestWithAccessToken(chain)
+                }
+            } else {
+                mJwtSyncState = WITHOUT_TOKENS
 
                 return@addInterceptor chain.proceed(chain.request())
-//            }
+            }
         }
     }
 
@@ -107,39 +132,39 @@ object RetrofitInstance {
         return (jwt.expiresAt?.time ?: 0) - Date().time < 30 * 1000
     }
 
-//    @Synchronized
-//    private fun requestAccessToken(chain: Interceptor.Chain): Response {
-//
-//        mJwtSyncState = WAITING
-//
-//        accessToken = null
-//
-//        val response = ApiInteractor()
-//            .getApiService(AuthApiMethods::class.java)
-//            .refreshToken(AuthRefreshReqData(refreshToken!!))
-//            .execute()
-//
-//        mRetryCount++
-//
-//        return when (response.isSuccessful) {
-//
-//            true -> {
-//                val body = response.body()
-//                accessToken = body?.data?.accessToken
-//                refreshToken = body?.data?.refreshToken
-//
-//                mRetryCount = 0
-//
-//                requestWithAccessToken(chain)
-//            }
-//
-//            else -> {
-//                mJwtSyncState = WITHOUT_TOKENS
-//                (appContext as MainApp).getCurrentActivity()?.logout()
-//                chain.proceed(chain.request())
-//            }
-//        }
-//    }
+    @Synchronized
+    private fun requestAccessToken(chain: Interceptor.Chain): Response {
+
+        mJwtSyncState = JwtSyncState.WAITING
+
+        accessToken = null
+
+        val response = ServiceInteractor()
+            .getApiService(ApiMethods::class.java)
+            .refreshToken(AuthRefreshReqData(refreshToken!!))
+            .execute()
+
+        mRetryCount++
+
+        return when (response.isSuccessful) {
+
+            true -> {
+                val body = response.body()
+                accessToken = body?.accessToken
+                refreshToken = body?.refreshToken
+
+                mRetryCount = 0
+
+                requestWithAccessToken(chain)
+            }
+
+            else -> {
+                mJwtSyncState = WITHOUT_TOKENS
+                (appContext as MainApp).getCurrentActivity()?.logout()
+                chain.proceed(chain.request())
+            }
+        }
+    }
 
     private fun requestWithAccessToken(chain: Interceptor.Chain): Response {
 

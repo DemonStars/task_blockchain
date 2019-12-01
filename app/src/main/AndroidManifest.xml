@@ -2,6 +2,7 @@
     package="com.lfkekpoint.blockchain.task">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name="com.raketa.im.lfkekpoint.utaircashbox.presentation.modules.application.MainApp"
         android:allowBackup="true"
@@ -12,7 +13,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".dev.presentation.StartActivity"
+            android:name=".presentation.StartActivity"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -21,5 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".presentation.LoginActivity"
+            android:launchMode="singleInstance"/>
     </application>
 </manifest>

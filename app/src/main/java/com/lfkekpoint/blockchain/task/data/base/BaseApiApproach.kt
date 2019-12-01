@@ -3,7 +3,7 @@ package com.lfkekpoint.blockchain.task.data.base
 import android.annotation.SuppressLint
 import com.google.gson.JsonSyntaxException
 import com.lfkekpoint.blockchain.task.R
-import com.lfkekpoint.blockchain.task.domain.features.service.ApiInteractor
+import com.lfkekpoint.blockchain.task.domain.features.service.ServiceInteractor
 import com.lfkekpoint.blockchain.task.presentation.helper.ResHelper.getString
 import com.raketa.im.lfkekpoint.utaircashbox.presentation.modules.application.appLifeClasses.AppState.appContext
 import io.reactivex.Completable
@@ -21,23 +21,23 @@ abstract class BaseApiMapper<Response, Entity> {
 
 @SuppressLint("CheckResult")
 fun Subject<*>.requestApiWithNetworkListener(
-    apiIteractor: ApiInteractor,
+    serviceInteractor: ServiceInteractor,
     actionRequest: () -> Unit
 ) {
-    if (apiIteractor.isInternetAvailable(appContext)) {
+    if (serviceInteractor.isInternetAvailable(appContext)) {
 
         actionRequest.invoke()
     } else {
 
         //todo do we need subject here? Maybe Observable??
-        val networkSubject = apiIteractor.registerNetworkListener(appContext)
+        val networkSubject = serviceInteractor.registerNetworkListener(appContext)
 
         networkSubject.subscribe { connected ->
             if (connected) {
 
                 actionRequest.invoke()
 
-                apiIteractor.unRegisterNetworkListener(appContext, networkSubject)
+                serviceInteractor.unRegisterNetworkListener(appContext, networkSubject)
             }
         }
     }
