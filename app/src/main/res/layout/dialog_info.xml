@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.lfkekpoint.blockchain.task.presentation.features.dialogs.info.InfoViewModel" />
+
+        <variable
+                name="dialogInfo"
+                type="com.lfkekpoint.blockchain.task.presentation.features.dialogs.info.InfoViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:background="@color/black_50">
+
+        <View
+                android:id="@+id/view23"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_116"
+                android:layout_marginStart="38dp"
+                android:layout_marginEnd="38dp"
+                android:background="@drawable/bg_round_filled_white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+                android:id="@+id/view24"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_1"
+                android:layout_marginBottom="48dp"
+                android:background="@color/background_grey"
+                app:layout_constraintBottom_toBottomOf="@+id/view23"
+                app:layout_constraintEnd_toEndOf="@+id/view23"
+                app:layout_constraintStart_toStartOf="@+id/view23" />
+
+
+        <TextView
+                android:id="@+id/textView82"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:text="@{dialogInfo.title}"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/view24"
+                app:layout_constraintEnd_toEndOf="@+id/view23"
+                app:layout_constraintStart_toStartOf="@+id/view23"
+                app:layout_constraintTop_toTopOf="@+id/view23"
+                tools:text="Уведомлялка" />
+
+
+        <TextView
+                android:id="@+id/textView83"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:onClick="@{dialogInfo::onClickOk}"
+                android:text="@string/txt_ok"
+                android:textAllCaps="true"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="@+id/view23"
+                app:layout_constraintEnd_toEndOf="@+id/view23"
+                app:layout_constraintStart_toStartOf="@+id/view23"
+                app:layout_constraintTop_toBottomOf="@+id/view24" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

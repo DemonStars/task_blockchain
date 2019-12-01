@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="error_ping_timeout">Превышен интервал запроса</string>
+    <string name="server_answer_wrong">Неверный формат ответа</string>
+    <string name="error_server">Ошибка запроса</string>
+    <string name="error_no_connect">Неизвестный сервер</string>
+    <string name="error_knpe">Ошибка приложения: KNPE</string>
+    <string name="error_default">Что то пошло не так</string>
+    <string name="txt_ok">ok</string>
+</resources>
