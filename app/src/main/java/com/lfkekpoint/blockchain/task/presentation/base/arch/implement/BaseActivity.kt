@@ -13,11 +13,10 @@ import com.lfkekpoint.blockchain.task.R
 import com.lfkekpoint.blockchain.task.domain.base.ApiMessageException
 import com.lfkekpoint.blockchain.task.domain.features.shareds.shareds.SharedPrefs
 import com.lfkekpoint.blockchain.task.presentation.base.arch.interfaces.BaseRootView
-import com.lfkekpoint.blockchain.task.presentation.helper.IntentHelper
 import com.lfkekpoint.blockchain.task.presentation.helper.SnackHelper
+import com.lfkekpoint.blockchain.task.presentation.helper.logoutToStartActivity
 import com.raketa.im.lfkekpoint.utaircashbox.presentation.modules.application.MainApp
 import io.reactivex.subjects.BehaviorSubject
-
 
 abstract class BaseActivity : AppCompatActivity(), BaseRootView {
 
@@ -119,23 +118,7 @@ abstract class BaseActivity : AppCompatActivity(), BaseRootView {
 
     @SuppressLint("CheckResult")
     fun logout() {
-
-        if (SharedPrefs.TokenData.accessToken.isNullOrBlank().not()) {
-
-            //todo logout
-//            AuthInteractor().logout()
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(
-//                            { clearAndExit() },
-//                            { LogHelper.i(it.message) })
-        } else {
-            clearAndExit()
-        }
-    }
-
-    private fun clearAndExit() {
         SharedPrefs.clearAllPrefs()
-        IntentHelper.logoutToStartActivity(this)
+        logoutToStartActivity()
     }
 }

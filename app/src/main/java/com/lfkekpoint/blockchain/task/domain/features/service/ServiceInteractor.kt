@@ -3,6 +3,7 @@ package com.lfkekpoint.blockchain.task.domain.features.service
 import android.content.Context
 import com.lfkekpoint.blockchain.task.service.NetworkManager
 import io.reactivex.subjects.BehaviorSubject
+import okhttp3.WebSocket
 
 class ServiceInteractor {
 
@@ -24,7 +25,7 @@ class ServiceInteractor {
         return mController.getApiService(methodsInterfaceClass)
     }
 
-    fun getDatabaseClient() {
-        //todo
-    }
+//    fun getWebSocket(urlConnection: String): WebSocket {
+//        //todo
+//    }
 }

@@ -25,5 +25,8 @@
 
         <activity android:name=".presentation.LoginActivity"
             android:launchMode="singleInstance"/>
+
+        <activity android:name=".presentation.MainActivity"
+            android:launchMode="singleInstance"/>
     </application>
 </manifest>

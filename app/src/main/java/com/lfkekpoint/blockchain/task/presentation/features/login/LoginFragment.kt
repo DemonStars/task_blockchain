@@ -4,6 +4,7 @@ import com.lfkekpoint.blockchain.task.BR
 import com.lfkekpoint.blockchain.task.R
 import com.lfkekpoint.blockchain.task.presentation.base.arch.mvvm.BaseBindableFragment
 import com.lfkekpoint.blockchain.task.presentation.base.arch.mvvm.StateObserver
+import com.lfkekpoint.blockchain.task.presentation.helper.startMainActivity
 import io.reactivex.Observer
 
 class LoginFragment : BaseBindableFragment() {
@@ -14,9 +15,9 @@ class LoginFragment : BaseBindableFragment() {
 
     override val stateObserver = StateObserver<LoginState>(
         onNextAction = { state ->
-                            when (state) {
-                                GoMain -> showMessage("GoMain")
-                    }
+            when (state) {
+                GoMain -> activity?.startMainActivity()
+            }
         },
         onSubscribeAction = { controller.disposable.add(it) }
     ) as Observer<Any>

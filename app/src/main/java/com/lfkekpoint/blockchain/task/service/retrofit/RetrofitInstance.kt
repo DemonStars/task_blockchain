@@ -4,15 +4,12 @@ import com.auth0.android.jwt.JWT
 import com.google.gson.GsonBuilder
 import com.lfkekpoint.blockchain.task.BuildConfig
 import com.lfkekpoint.blockchain.task.common.Const
-import com.lfkekpoint.blockchain.task.common.Const.BEARER_PREFFIX
-import com.lfkekpoint.blockchain.task.common.Const.JWT_HEADER
 import com.lfkekpoint.blockchain.task.data.features.api.ApiMethods
-import com.lfkekpoint.blockchain.task.domain.base.ApiMessageException
 import com.lfkekpoint.blockchain.task.domain.features.api.refresh.AuthRefreshReqData
 import com.lfkekpoint.blockchain.task.domain.features.service.ServiceInteractor
 import com.lfkekpoint.blockchain.task.domain.features.shareds.shareds.SharedPrefs.TokenData.accessToken
 import com.lfkekpoint.blockchain.task.domain.features.shareds.shareds.SharedPrefs.TokenData.refreshToken
-import com.lfkekpoint.blockchain.task.presentation.helper.LogHelper
+import com.lfkekpoint.blockchain.task.presentation.helper.i
 import com.lfkekpoint.blockchain.task.service.retrofit.RetrofitInstance.JwtSyncState.SYNCHRONIZED
 import com.lfkekpoint.blockchain.task.service.retrofit.RetrofitInstance.JwtSyncState.WITHOUT_TOKENS
 import com.raketa.im.lfkekpoint.utaircashbox.presentation.modules.application.MainApp
@@ -46,7 +43,6 @@ object RetrofitInstance {
 
         addJwtInterceptorToBuilder(okBuilder)
         addJwtInterceptorListenerToBuilder(okBuilder)
-//        addErrorIntercaptor(okBuilder)
 
         if (BuildConfig.DEBUG) {
             val interceptor = HttpLoggingInterceptor()
@@ -172,7 +168,7 @@ object RetrofitInstance {
 
         val original = chain.request()
         val builder = original.newBuilder()
-            .method(original.method(), original.body())
+            .method(original.method, original.body)
 
         if (accessToken.isNullOrBlank().not()) {
             builder.header(Const.JWT_HEADER, "${Const.BEARER_PREFFIX}$accessToken")
@@ -190,30 +186,11 @@ object RetrofitInstance {
         }
     }
 
-//    private fun addErrorIntercaptor(okBuilder: OkHttpClient.Builder) {
-//
-//        okBuilder.addInterceptor { chain ->
-//            val response: Response = chain.proceed(chain.request())
-//
-//            if (response.isSuccessful.not()) {
-//                val stringBody = response.body()?.string()
-//                val entity = GsonBuilder().create().fromJson<ApiResponseError>(stringBody, ApiResponseError::class.java)
-//                entity.error?.message.let {
-//                    if (response.code() != 401) {
-//                        throw ApiMessageException(it!!, entity?.error?.code)
-//                    }
-//                }
-//            }
-//
-//            response
-//        }
-//    }
-
     private fun returnChainWhenNeed(chain: Interceptor.Chain): Response {
 
         mRetryCount++
 
-        LogHelper.i("retryCount: $mRetryCount", "returnChainWhenNeed")
+        "retryCount: $mRetryCount".i("returnChainWhenNeed")
 
         Thread.sleep(500L) //fixme - переделать же некрасиво ну
 

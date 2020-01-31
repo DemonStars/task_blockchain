@@ -1,15 +1,15 @@
 package com.lfkekpoint.blockchain.task.presentation.helper
 
+import android.app.Activity
 import android.content.Intent
+import com.lfkekpoint.blockchain.task.presentation.MainActivity
 import com.lfkekpoint.blockchain.task.presentation.base.arch.implement.BaseActivity
 
-object IntentHelper {
 
-    fun logoutToStartActivity(activity: BaseActivity) {
+fun BaseActivity.logoutToStartActivity() {
 
-//        val intent = Intent(activity, StartActivity::class.java)
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-//        activity.startActivity(intent)
-//        activity.finish()
     }
+
+fun Activity.startMainActivity() {
+    this.startActivity(Intent(this, MainActivity::class.java))
 }
